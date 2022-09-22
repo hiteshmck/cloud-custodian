@@ -462,3 +462,16 @@ class AutoscalerTest(BaseTest):
         self.assertEqual(result_policy['loadBalancingUtilization']['utilizationTarget'], 0.7)
         self.assertEqual(result_policy['minNumReplicas'], 1)
         self.assertEqual(result_policy['maxNumReplicas'], 4)
+        
+class ProjectInfoTest(BaseTest):
+
+    def test_project_info_get(self):
+        factory = self.replay_flight_data('project-info-get')
+        p = self.load_policy(
+            {'name': 'gcp-project-info-get-dryrun',
+             'resource': 'gcp.project-info',
+              'filters': [
+                 {'name': 'project-info-get-dryrun'}]},
+            session_factory=factory)
+        resources = p.run()
+        self.assertEqual(len(resources), 1)

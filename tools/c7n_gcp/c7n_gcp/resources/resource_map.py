@@ -69,6 +69,7 @@ ResourceMap = {
     "gcp.ml-model": "c7n_gcp.resources.mlengine.MLModel",
     "gcp.organization": "c7n_gcp.resources.resourcemanager.Organization",
     "gcp.project": "c7n_gcp.resources.resourcemanager.Project",
+    "gcp.project-info": "c7n_gcp.resources.compute.Project",    
     "gcp.project-role": "c7n_gcp.resources.iam.ProjectRole",
     "gcp.pubsub-snapshot": "c7n_gcp.resources.pubsub.PubSubSnapshot",
     "gcp.pubsub-subscription": "c7n_gcp.resources.pubsub.PubSubSubscription",

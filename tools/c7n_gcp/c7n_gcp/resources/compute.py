@@ -590,3 +590,21 @@ class AutoscalerSet(MethodAction):
                   }}
 
         return result
+        
+@resources.register('project-info')
+class Project(QueryResourceManager):
+
+    class resource_type(TypeInfo):
+        service = 'compute'
+        version = 'v1'
+        component = 'projects'
+        name = id = 'name'
+        enum_spec = ('get', '[@]', None)
+        default_report_fields = [
+            "name", "description", "creationTimestamp","defaultServiceAccount", "xpnProjectStatus", "defaultNetworkTier"]
+        asset_type = "compute.googleapis.com/Project"
+
+        @staticmethod
+        def get(client, resource_info):
+            return client.execute_command(
+                'get', {'project': resource_info['project_id']})
