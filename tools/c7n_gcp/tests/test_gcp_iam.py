@@ -224,15 +224,16 @@ class IAMRoleTest(BaseTest):
             ],
         )
 
+
 class ApiKeyTest(BaseTest):
 
     def test_api_key_query(self):
-        factory = self.replay_flight_data('api-key-list')
         project_id = 'cloud-custodian'
+        factory = self.replay_flight_data('api-key-list', project_id)
         p = self.load_policy(
             {'name': 'gcp-api-key-list',
              'resource': 'gcp.api-key',
-              'filters': [
+             'filters': [
                  {'name': 'projects/cloud-custodian/locations/global/keys/xxxx-xxxx'}]},
             session_factory=factory)
         resources = p.run()

@@ -122,7 +122,7 @@ class ServiceAccountKey(ChildResourceManager):
         component = 'projects.serviceAccounts.keys'
         enum_spec = ('list', 'keys[]', [])
         scope = None
-        scope_key = 'parent'
+        scope_key = 'name'
         name = id = 'name'
         default_report_fields = ['name', 'privateKeyType', 'keyAlgorithm',
           'validAfterTime', 'validBeforeTime', 'keyOrigin', 'keyType']
@@ -192,6 +192,7 @@ class Role(QueryResourceManager):
                     'name': 'roles/{}'.format(
                         resource_info['name'])})
 
+
 @resources.register('api-key')
 class ApiKey(QueryResourceManager):
     """GCP API Key
@@ -207,6 +208,3 @@ class ApiKey(QueryResourceManager):
         scope_template = 'projects/{}/locations/global'
         name = id = "name"
         asset_type = "apikeys.googleapis.com/projects.locations.keys"
-
-
-    
