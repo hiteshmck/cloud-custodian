@@ -207,5 +207,5 @@ class ApiKey(QueryResourceManager):
         scope_key = 'parent'
         scope_template = 'projects/{}/locations/global'
         name = id = "name"
-        default_report_fields = ['name', 'displayName', 'createTime', 'updateTime']    
+        default_report_fields = ['name', 'displayName', 'createTime', 'updateTime']
         asset_type = "apikeys.googleapis.com/projects.locations.keys"
