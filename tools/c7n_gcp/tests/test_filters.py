@@ -145,3 +145,44 @@ class TestSecurityComandCenterFindingsFilter(BaseTest):
         )
         resources = p.run()
         self.assertEqual(len(resources), 1)
+
+
+class TestAlertsFilter(BaseTest):
+
+    def test_metric_has_alert(self):
+
+        session_factory = self.replay_flight_data("filter-alerts")
+
+        p = self.load_policy(
+            {
+                "name": "test-alerts",
+                "resource": "gcp.log-project-metric",
+                "filters": [{
+                    'type': 'value',
+                    'key': 'name',
+                    'value': 'test-metric-1'},
+                    {'type': 'alerts'}],
+            },
+            session_factory=session_factory,
+        )
+        resources = p.run()
+        self.assertEqual(len(resources), 1)
+
+    def test_metric_has_no_alert(self):
+
+        session_factory = self.replay_flight_data("filter-alerts")
+
+        p = self.load_policy(
+            {
+                "name": "test-alerts",
+                "resource": "gcp.log-project-metric",
+                "filters": [{
+                    'type': 'value',
+                    'key': 'name',
+                    'value': 'test-metric-2'},
+                    {'type': 'alerts'}],
+            },
+            session_factory=session_factory,
+        )
+        resources = p.run()
+        self.assertEqual(len(resources), 0)
