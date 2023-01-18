@@ -25,11 +25,11 @@ class AlertsFilter(ValueFilter):
     permissions = ("monitoring.alertPolicies.list",)
 
     def process(self, resources, event=None):
-        self.findings_list = self.get_findings(resources)
+        self.findings_list = self.get_findings()
         matched = [r for r in resources if self.process_resource(r)]
         return matched
 
-    def get_findings(self, resources):
+    def get_findings(self):
         query_params = {
             'pageSize': 1000
         }
@@ -57,6 +57,8 @@ class AlertsFilter(ValueFilter):
 
     @classmethod
     def register_resources(klass, registry, resource_class):
+        if resource_class.type != 'log-project-metric':
+            return
         resource_class.filter_registry.register('alerts', klass)
 
 

@@ -2,6 +2,7 @@
 # SPDX-License-Identifier: Apache-2.0
 from gcp_common import BaseTest
 from c7n_gcp.filters.metrics import GCPMetricsFilter
+from c7n.exceptions import PolicyValidationError
 
 
 class TestGCPMetricsFilter(BaseTest):
@@ -186,3 +187,17 @@ class TestAlertsFilter(BaseTest):
         )
         resources = p.run()
         self.assertEqual(len(resources), 0)
+
+    def test_alert_on_invalid_resource(self):
+
+        with self.assertRaises(PolicyValidationError):
+            self.load_policy(
+                {
+                    "name": "test-alerts",
+                    "resource": "gcp.bucket",
+                    "filters": [{
+                        'type': 'value',
+                        'key': 'name',
+                        'value': 'some-bucket'},
+                        {'type': 'alerts'}],
+                })
