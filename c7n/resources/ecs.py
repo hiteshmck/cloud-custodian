@@ -30,8 +30,8 @@ def allow_all(s):
             ((isinstance(s['Action'], str) and s['Action'] == "*") or
             (isinstance(s['Action'], list) and "*" in s['Action'])) and
             'Resource' in s and
-            isinstance(s['Resource'], str) and
-            s['Resource'] == "*" and
+            ((isinstance(s['Resource'], str) and s['Resource'] == "*") or
+            (isinstance(s['Resource'], list) and "*" in s['Resource'])) and
             s['Effect'] == "Allow"
             )
 
