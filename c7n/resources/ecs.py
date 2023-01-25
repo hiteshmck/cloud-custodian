@@ -892,13 +892,15 @@ class ECSTaskRoleAllowAll(Filter):
         .. code-block:: yaml
 
             policies:
-                - name: taggable
+                - name: ecsrolehasallowall
                   resource: ecs-task-definition
                   filters:
                     - type: role-has-allow-all
     """
 
     schema = type_schema('role-has-allow-all')
+    permissions = ('iam:GetPolicyVersion', 'iam:GetPolicy',
+        'iam:GetRole', 'iam:GetRolePolicy', 'iam:ListRolePolicies')
 
     def _inline_policy_has_allow_all(self, client, resource):
         resource['c7n:InlinePolicyHasAllowAll'] = []
