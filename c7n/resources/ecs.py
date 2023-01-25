@@ -904,7 +904,7 @@ class ECSTaskRoleAllowAll(Filter):
         resource['c7n:InlinePolicyHasAllowAll'] = []
         RoleName = resource[self.get_role_arn_qualifier()].split('/')[-1]
 
-        try: 
+        try:
             policies = client.list_role_policies(
                 RoleName=RoleName)['PolicyNames']
         except client.exceptions.NoSuchEntityException:
@@ -921,7 +921,7 @@ class ECSTaskRoleAllowAll(Filter):
 
                 for s in statements:
                     if allow_all(s):
-                        resource['c7n:InlinePolicyHasAllowAll'].append(p)    
+                        resource['c7n:InlinePolicyHasAllowAll'].append(p)
         return resource
 
     def _cmanaged_policy_has_allow_all(self, client, resource):
@@ -948,7 +948,7 @@ class ECSTaskRoleAllowAll(Filter):
 
                 for s in statements:
                     if allow_all(s):
-                        resource['c7n:CustomerManagedPolicyHasAllowAll'].append(p)    
+                        resource['c7n:CustomerManagedPolicyHasAllowAll'].append(p)
         return resource
 
     def get_role_arn_qualifier(self):
