@@ -886,7 +886,7 @@ class ECSTaggable(Filter):
 class ECSTaskRoleAllowAll(Filter):
     """
     Filter ECS task definition resources where task role has allow all permissions.
-    It checks inline policies as well as customer managed policies.
+    It checks inline policies as well as managed(customer and aws) policies.
     :example:
 
         .. code-block:: yaml
@@ -926,8 +926,8 @@ class ECSTaskRoleAllowAll(Filter):
                         resource['c7n:InlinePolicyHasAllowAll'].append(p)
         return resource
 
-    def _cmanaged_policy_has_allow_all(self, client, resource):
-        resource['c7n:CustomerManagedPolicyHasAllowAll'] = []
+    def _managed_policy_has_allow_all(self, client, resource):
+        resource['c7n:ManagedPolicyHasAllowAll'] = []
         RoleName = resource[self.get_role_arn_qualifier()].split('/')[-1]
 
         try:
@@ -936,9 +936,9 @@ class ECSTaskRoleAllowAll(Filter):
         except client.exceptions.NoSuchEntityException:
             return resource
 
-        resource['c7n:CustomerManagedPolicies'] = policies
+        resource['c7n:ManagedPolicies'] = policies
 
-        if len(resource['c7n:CustomerManagedPolicies']) > 0:
+        if len(resource['c7n:ManagedPolicies']) > 0:
             for p in policies:
                 cmanaged_policy = client.get_policy(PolicyArn=p['PolicyArn'])
                 cmanaged_policy_document = client.get_policy_version(
@@ -950,7 +950,7 @@ class ECSTaskRoleAllowAll(Filter):
 
                 for s in statements:
                     if allow_all(s):
-                        resource['c7n:CustomerManagedPolicyHasAllowAll'].append(p)
+                        resource['c7n:ManagedPolicyHasAllowAll'].append(p)
         return resource
 
     def get_role_arn_qualifier(self):
@@ -962,9 +962,9 @@ class ECSTaskRoleAllowAll(Filter):
         for r in resources:
             if self.get_role_arn_qualifier() in r:
                 r = self._inline_policy_has_allow_all(c, r)
-                r = self._cmanaged_policy_has_allow_all(c, r)
+                r = self._managed_policy_has_allow_all(c, r)
                 if len(r['c7n:InlinePolicyHasAllowAll']) > 0 \
-                        or len(r['c7n:CustomerManagedPolicyHasAllowAll']) > 0:
+                        or len(r['c7n:ManagedPolicyHasAllowAll']) > 0:
                     res.append(r)
         return res
 
