@@ -609,7 +609,3 @@ class TestEcsContainerInstance(BaseTest):
         resources = p.run()
         self.assertEqual(len(resources), 1)
         self.assertEqual(resources[0].get('c7n:matched-subnets')[0], 'subnet-914763e7')
-
-
-
-
