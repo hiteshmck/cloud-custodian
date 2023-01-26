@@ -5,10 +5,11 @@ GCP Filter to find Alerts for a Log Metric Filter
 """
 from c7n.filters.core import ValueFilter
 from c7n.utils import local_session, type_schema
-from c7n_gcp.provider import resources as gcp_resources
 import jmespath
+from c7n_gcp.resources.logging import LogProjectMetric
 
 
+@LogProjectMetric.filter_registry.register('alerts')
 class AlertsFilter(ValueFilter):
     """GCP Filter to find Alerts for a Log Metric Filter.
 
@@ -45,21 +46,13 @@ class AlertsFilter(ValueFilter):
         return findings_list
 
     def process_resource(self, resource):
-        resource_name = resource.get('name')
+        resource_name = resource['name']
+        enabled_alerts = jmespath.search("[?enabled]", self.findings_list)
         search_string = "[*].conditions[?contains(conditionThreshold.filter,\
         'metric.type=\"logging.googleapis.com/user/" + resource_name + "\"')]"
-        result = jmespath.search(search_string, self.findings_list)
+        result = jmespath.search(search_string, enabled_alerts)
 
         if not any(result):
             return False
         else:
             return True
-
-    @classmethod
-    def register_resources(klass, registry, resource_class):
-        if resource_class.type != 'log-project-metric':
-            return
-        resource_class.filter_registry.register('alerts', klass)
-
-
-gcp_resources.subscribe(AlertsFilter.register_resources)
