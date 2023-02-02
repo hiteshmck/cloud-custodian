@@ -445,3 +445,22 @@ class ProjectTest(BaseTest):
 
         resources = p.run()
         self.assertEqual(len(resources), 1)
+
+    def test_project_missing_filter_permissions(self):
+
+        p = self.load_policy(
+            {
+                'name': 'resource',
+                'resource': 'gcp.project',
+                'filters': [{
+                    'type': 'missing',
+                    'policy': {
+                        'resource': 'gcp.bucket'}
+                }]
+            }
+        )
+
+        perms = p.resource_manager.filters[0].get_permissions()
+
+        if not perms:
+            self.fail('missing permissions on \"missing\" filter')
