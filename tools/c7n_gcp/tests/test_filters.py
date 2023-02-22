@@ -215,7 +215,7 @@ class TestEssentialContactsFilter(BaseTest):
                 "resource": "gcp.organization",
                 "filters": [{
                     'type': 'essentialcontacts',
-                    'org': '999999999999',
+                    'org': 999999999999,
                     'category': 'TECHNICAL'}, ],
             },
             session_factory=session_factory,
@@ -233,7 +233,7 @@ class TestEssentialContactsFilter(BaseTest):
                 "resource": "gcp.organization",
                 "filters": [{
                     'type': 'essentialcontacts',
-                    'org': '999999999999',
+                    'org': 999999999999,
                     'category': 'ALL'}, ],
             },
             session_factory=session_factory,
