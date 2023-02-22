@@ -9,7 +9,7 @@ from c7n_gcp.resources.resourcemanager import Organization
 import jmespath
 
 
-@Organization.filter_registry.register('essentialcontacts')
+@Organization.filter_registry.register('essential-contacts')
 class EssentialContactsFilter(ValueFilter):
     """Filter Resources based on essential contacts configuration
 
@@ -18,11 +18,11 @@ class EssentialContactsFilter(ValueFilter):
       - name: org-essential-contacts
         resource: gcp.organization
         filters:
-        - type: essentialcontacts
+        - type: essential-contacts
           org: 99999999
           category: "ALL"
     """
-    schema = type_schema('essentialcontacts',
+    schema = type_schema('essential-contacts',
                         org={'type': 'integer'}, category={'type': 'string'}, required=['org'])
     required_keys = {}
     permissions = ("essentialcontacts.contacts.list",)

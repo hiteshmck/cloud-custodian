@@ -214,7 +214,7 @@ class TestEssentialContactsFilter(BaseTest):
                 "name": "test-essentialcontacts",
                 "resource": "gcp.organization",
                 "filters": [{
-                    'type': 'essentialcontacts',
+                    'type': 'essential-contacts',
                     'org': 999999999999,
                     'category': 'TECHNICAL'}, ],
             },
@@ -232,7 +232,7 @@ class TestEssentialContactsFilter(BaseTest):
                 "name": "test-essentialcontacts",
                 "resource": "gcp.organization",
                 "filters": [{
-                    'type': 'essentialcontacts',
+                    'type': 'essential-contacts',
                     'org': 999999999999,
                     'category': 'ALL'}, ],
             },

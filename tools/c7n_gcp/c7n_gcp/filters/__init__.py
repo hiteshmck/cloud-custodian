@@ -5,4 +5,4 @@ from .metrics import GCPMetricsFilter
 from .sccfindings import SecurityComandCenterFindingsFilter
 from .iampolicy import IamPolicyFilter
 from .alerts import AlertsFilter
-from .essentialcontacts import EssentialContactsFilter
+from .essential_contacts import EssentialContactsFilter
