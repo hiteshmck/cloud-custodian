@@ -201,3 +201,42 @@ class TestAlertsFilter(BaseTest):
                         'value': 'some-bucket'},
                         {'type': 'alerts'}],
                 })
+
+
+class TestEssentialContactsFilter(BaseTest):
+
+    def test_essentialcontacts_filter_true(self):
+
+        session_factory = self.replay_flight_data("filter-essentialcontacts")
+
+        p = self.load_policy(
+            {
+                "name": "test-essentialcontacts",
+                "resource": "gcp.organization",
+                "filters": [{
+                    'type': 'essentialcontacts',
+                    'org': '999999999999',
+                    'category': 'TECHNICAL'}, ],
+            },
+            session_factory=session_factory,
+        )
+        resources = p.run()
+        self.assertEqual(len(resources), 1)
+
+    def test_essentialcontacts_filter_false(self):
+
+        session_factory = self.replay_flight_data("filter-essentialcontacts")
+
+        p = self.load_policy(
+            {
+                "name": "test-essentialcontacts",
+                "resource": "gcp.organization",
+                "filters": [{
+                    'type': 'essentialcontacts',
+                    'org': '999999999999',
+                    'category': 'ALL'}, ],
+            },
+            session_factory=session_factory,
+        )
+        resources = p.run()
+        self.assertEqual(len(resources), 0)
