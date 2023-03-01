@@ -11,7 +11,7 @@ import jmespath
 
 @Organization.filter_registry.register('essential-contacts')
 class EssentialContactsFilter(ValueFilter):
-    """Filter Resources based on essential contacts configuration
+    """Filter Resources based on essential contacts configuration, org is optional
 
     .. code-block:: yaml
 
@@ -23,7 +23,7 @@ class EssentialContactsFilter(ValueFilter):
           category: "ALL"
     """
     schema = type_schema('essential-contacts',
-                        org={'type': 'integer'}, category={'type': 'string'}, required=['org'])
+                        org={'type': 'integer'}, category={'type': 'string'})
     required_keys = {}
     permissions = ("essentialcontacts.contacts.list",)
     annotation_key = 'c7n:matched-findings'
@@ -38,12 +38,24 @@ class EssentialContactsFilter(ValueFilter):
             'pageSize': 100
         }
         session = local_session(self.manager.session_factory)
+        if not self.data.get('org'):
+            project_id = session.get_default_project()
+            org_client = session.client("cloudresourcemanager", "v1", "projects")
+            ancestors = org_client.execute_command(
+                'getAncestry', {'projectId': project_id}).get('ancestor')
+
+            for a in ancestors:
+                if a['resourceId']['type'] == 'organization':
+                    org_id = a['resourceId']['id']
+        else:
+            org_id = self.data['org']
         client = session.client("essentialcontacts", "v1", "organizations.contacts")
 
+        # org_id = "999999999999"
         findings_paged_list = list(
             client.execute_paged_query(
                 'list',
-                {'parent': f"organizations/{self.data['org']}", **query_params},
+                {'parent': f"organizations/{org_id}", **query_params},
             )
         )
         findings_list = []

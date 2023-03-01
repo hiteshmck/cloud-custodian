@@ -240,3 +240,20 @@ class TestEssentialContactsFilter(BaseTest):
         )
         resources = p.run()
         self.assertEqual(len(resources), 0)
+
+    def test_essentialcontacts_filter_default_org(self):
+
+        session_factory = self.replay_flight_data("filter-essentialcontacts")
+
+        p = self.load_policy(
+            {
+                "name": "test-essentialcontacts",
+                "resource": "gcp.organization",
+                "filters": [{
+                    'type': 'essential-contacts',
+                    'category': 'TECHNICAL'}, ],
+            },
+            session_factory=session_factory,
+        )
+        resources = p.run()
+        self.assertEqual(len(resources), 1)
