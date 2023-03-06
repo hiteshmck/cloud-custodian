@@ -6,7 +6,9 @@ from c7n_gcp.provider import resources
 
 @resources.register('access-approval')
 class AccessApproval(QueryResourceManager):
-
+    """GCP Access Approval Settings
+    https://cloud.google.com/cloud-provider-access-management/access-approval/docs/reference/rest/v1/projects/getAccessApprovalSettings
+    """
     class resource_type(TypeInfo):
         service = 'accessapproval'
         version = 'v1'
@@ -18,3 +20,4 @@ class AccessApproval(QueryResourceManager):
         name = id = "name"
         default_report_fields = ["name", "notificationEmails", "enrolledServices"]
         permissions = ('accessapproval.settings.get',)
+        asset_type = "accessapproval.googleapis.com/projects"
