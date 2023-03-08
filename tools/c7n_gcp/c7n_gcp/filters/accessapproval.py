@@ -39,8 +39,9 @@ class AccessApprovalFilter(ValueFilter):
         except HttpError as ex:
             if (ex.status_code == 400 and ex.reason == "Precondition check failed.") \
                     or (ex.status_code == 404):
-                # For above errors, it means either access transparency is not enabled(precondition)
-                # OR access approval is not enabled, so we want to return empty list
+                """For above errors, it means either access transparency is not enabled(precondition)
+                   OR access approval is not enabled, so we want to return empty list
+                """
                 findings = []
             else:
                 raise ex
