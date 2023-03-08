@@ -1,7 +1,6 @@
 # Copyright The Cloud Custodian Authors.
 # SPDX-License-Identifier: Apache-2.0
 ResourceMap = {
-    "gcp.access-approval": "c7n_gcp.resources.accessapproval.AccessApproval",
     "gcp.api-key": "c7n_gcp.resources.iam.ApiKey",
     "gcp.app-engine": "c7n_gcp.resources.appengine.AppEngineApp",
     "gcp.app-engine-certificate": "c7n_gcp.resources.appengine.AppEngineCertificate",
