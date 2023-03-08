@@ -231,3 +231,17 @@ class TestAccessApprovalFilter(BaseTest):
         )
         resources = p.run()
         self.assertEqual(len(resources), 1)
+
+    def test_access_approval_disabled_precon(self):
+        session_factory = self.replay_flight_data('filter-access-approval-disabled-precon')
+        p = self.load_policy(
+            {'name': 'gcp-access-approval',
+             'resource': 'gcp.project',
+                "filters": [{
+                    'type': 'access-approval',
+                    'key': 'name',
+                    'value': 'absent'}]},
+            session_factory=session_factory,
+        )
+        resources = p.run()
+        self.assertEqual(len(resources), 1)

@@ -36,7 +36,11 @@ class AccessApprovalFilter(ValueFilter):
             findings = client.execute_query(
                 'getAccessApprovalSettings',
                 {'name': f"projects/{project}/accessApprovalSettings"},)
-        except HttpError:
-            findings = []
+        except HttpError as ex:
+            if (ex.status_code == 400 and ex.reason == "Precondition check failed.") \
+                    or (ex.status_code == 404):
+                findings = []
+            else:
+                raise ex
 
         return findings
