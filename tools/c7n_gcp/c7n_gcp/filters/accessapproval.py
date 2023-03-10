@@ -42,6 +42,10 @@ class AccessApprovalFilter(ValueFilter):
             if (ex.status_code == 400
                 and ex.reason == "Precondition check failed.") \
                     or (ex.status_code == 404):
+                """
+                For above exceptions, it implies that access approval is 
+                not enabled, so we return an empty list.
+                """
                 findings = []
             else:
                 raise ex
