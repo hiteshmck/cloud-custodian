@@ -12,7 +12,9 @@ from googleapiclient.errors import HttpError
 @Project.filter_registry.register('access-approval')
 class AccessApprovalFilter(ValueFilter):
     """Filter Resources based on access approval configuration
+
     .. code-block:: yaml
+
       - name: project-access-approval
         resource: gcp.project
         filters:
