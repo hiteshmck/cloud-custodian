@@ -12,6 +12,7 @@ from c7n.resolver import ValuesFrom
 from c7n.utils import type_schema, local_session
 from c7n.filters.core import ValueFilter
 from c7n.filters.missing import Missing
+import jmespath
 
 
 @resources.register('organization')
@@ -369,3 +370,67 @@ class ProjectPropagateLabels(HierarchyAction):
 
             if delta:
                 yield ('update', model.get_label_params(r, rlabels))
+
+
+@Organization.filter_registry.register('essential-contacts')
+class EssentialContactsFilter(ValueFilter):
+    """Filter Resources based on essential contacts configuration, org is optional
+
+    .. code-block:: yaml
+
+      - name: org-essential-contacts
+        resource: gcp.organization
+        filters:
+        - type: essential-contacts
+          org: 99999999
+          category: "ALL"
+    """
+    schema = type_schema('essential-contacts',
+                        org={'type': 'integer'}, category={'type': 'string'})
+    required_keys = {}
+    permissions = ("essentialcontacts.contacts.list",)
+    annotation_key = 'c7n:matched-findings'
+
+    def process(self, resources, event=None):
+        self.essentialcontacts_list = self.get_essentialcontacts()
+        return [r for r in resources if self.process_resource(r)]
+
+    def get_essentialcontacts(self):
+        self.findings_by_resource = {}
+        query_params = {
+            'pageSize': 100
+        }
+        session = local_session(self.manager.session_factory)
+        if not self.data.get('org'):
+            project_id = session.get_default_project()
+            org_client = session.client("cloudresourcemanager", "v1", "projects")
+            ancestors = org_client.execute_command(
+                'getAncestry', {'projectId': project_id}).get('ancestor')
+
+            for a in ancestors:
+                if a['resourceId']['type'] == 'organization':
+                    org_id = a['resourceId']['id']
+        else:
+            org_id = self.data['org']
+        client = session.client("essentialcontacts", "v1", "organizations.contacts")
+
+        essentialcontacts_paged_list = list(
+            client.execute_paged_query(
+                'list',
+                {'parent': f"organizations/{org_id}", **query_params},
+            )
+        )
+        essentialcontacts_list = []
+        for essentialcontacts_page in essentialcontacts_paged_list:
+            if essentialcontacts_page.get('contacts'):
+                essentialcontacts_list.extend(essentialcontacts_page['contacts'])
+        return essentialcontacts_list
+
+    def process_resource(self, resource):
+        filtered_contact = []
+        if self.data.get('category'):
+            search_path = "[?notificationCategorySubscriptions[?@== '" + \
+                self.data.get('category') + "']]"
+            filtered_contact = jmespath.search(search_path, self.essentialcontacts_list)
+
+        return len(filtered_contact) > 0
