@@ -390,15 +390,15 @@ class AccessApprovalFilter(ValueFilter):
 
     def process(self, resources, event=None):
         return [r for r in resources
-                if self.match(self.get_accessapprovalconfig(r))]
+                if self.match(self.get_access_approval(r))]
 
-    def get_accessapprovalconfig(self, resource):
+    def get_access_approval(self, resource):
         session = local_session(self.manager.session_factory)
         client = session.client("accessapproval", "v1", "projects")
         project = resource['projectId']
 
         try:
-            accessapprovalconfig = client.execute_command(
+            access_approval = client.execute_command(
                 'getAccessApprovalSettings',
                 {'name': f"projects/{project}/accessApprovalSettings"},)
         except HttpError as ex:
@@ -406,9 +406,9 @@ class AccessApprovalFilter(ValueFilter):
                 and ex.reason == "Precondition check failed.") \
                     or (ex.status_code == 404):
                 # For above exceptions, it implies that access approval is
-                # not enabled, so we return an empty list.
-                accessapprovalconfig = {}
+                # not enabled, so we return an empty setting.
+                access_approval = {}
             else:
                 raise ex
 
-        return accessapprovalconfig
+        return access_approval
