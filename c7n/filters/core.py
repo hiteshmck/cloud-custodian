@@ -1118,7 +1118,6 @@ class ListItemFilter(Filter):
 
     schema = type_schema(
         'list-item',
-        required={'anyOf': [['key', 'attrs'], ['key', 'count']]},
         **{
             'key': {'type': 'string'},
             'attrs': {'$ref': '#/definitions/filters_common/list_item_attrs'},
