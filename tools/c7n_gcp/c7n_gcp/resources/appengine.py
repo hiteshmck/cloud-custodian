@@ -143,3 +143,29 @@ class AppEngineFirewallIngressRule(ChildResourceManager):
             return client.execute_query(
                 'get', {'appsId': apps_id,
                         'ingressRulesId': ingress_rules_id})
+
+
+
+@resources.register('app-engine-service')
+class AppEngineService(ChildResourceManager):
+    """GCP resource:
+    https://cloud.google.com/appengine/docs/admin-api/reference/rest/v1/apps.services
+    """
+    def _get_parent_resource_info(self, child_instance):
+        return {'resourceName': re.match(
+            '(apps/.*?)/services/.*', child_instance['name']).group(1)}
+
+    class resource_type(AppEngineChildTypeInfo):
+        component = 'apps.services'
+        enum_spec = ('list', 'services[]', None)
+        name = 'name'
+        id = 'id'
+        default_report_fields = ['name', 'networkSettings']
+        urn_component = "service"
+
+        @staticmethod
+        def get(client, resource_info):
+            apps_id, service_id = re.match('apps/(.*?)/services/(.*)',
+                                resource_info['resourceName']).groups()
+            return client.execute_query('get', {'appsId': apps_id,
+                                                'servicesId': service_id})
