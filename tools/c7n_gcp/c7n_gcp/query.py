@@ -328,7 +328,7 @@ class ChildResourceManager(QueryResourceManager):
         for mapping in mappings:
             result[mapping[1]] = jmespath.search(mapping[0], source)
             if 'regex' in mapping:
-                result[mapping[1]] = re.search(mapping[3],result[mapping[1]]).group(1)
+                result[mapping[1]] = re.search(mapping[3], result[mapping[1]]).group(1)
 
         return result
 
