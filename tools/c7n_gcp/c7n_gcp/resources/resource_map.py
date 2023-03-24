@@ -9,6 +9,7 @@ ResourceMap = {
     "gcp.app-engine-firewall-ingress-rule": (
         "c7n_gcp.resources.appengine.AppEngineFirewallIngressRule"),
     "gcp.app-engine-service": "c7n_gcp.resources.appengine.AppEngineService",
+    "gcp.app-engine-service-version": "c7n_gcp.resources.appengine.AppEngineServiceVersion",    
     "gcp.autoscaler": "c7n_gcp.resources.compute.Autoscaler",
     "gcp.bq-dataset": "c7n_gcp.resources.bigquery.DataSet",
     "gcp.bq-job": "c7n_gcp.resources.bigquery.BigQueryJob",

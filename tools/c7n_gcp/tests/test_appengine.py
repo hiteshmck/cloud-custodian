@@ -269,3 +269,26 @@ class AppEngineServiceTest(BaseTest):
             policy.resource_manager.get_urns([resource]),
             ["gcp:appengine:europe-west3:cloud-custodian:service/12277184"],
         )
+
+
+class AppEngineServiceVersionTest(BaseTest):
+
+    def test_service_version(self):
+        project_id = 'cloud-custodian'
+        app_name = 'apps/{}'.format(project_id)
+        service_id = '12277184'
+        version_id = 'v3'
+        service_name = '{}/services/{}'.format(app_name, service_id)
+        version = '{}/services/{}/versions/{}'.format(app_name, service_id, version_id)
+        session_factory = self.replay_flight_data(
+            'app-engine-service-version', project_id=project_id)
+
+        policy = self.load_policy(
+            {'name': 'gcp-app-engine-service-version-run',
+             'resource': 'gcp.app-engine-service-version'},
+            session_factory=session_factory)
+        parent_annotation_key = policy.resource_manager.resource_type.get_parent_annotation_key()
+
+        resources = policy.run()
+        self.assertEqual(resources[0]['name'], version)
+        self.assertEqual(resources[0][parent_annotation_key]['name'], service_name)
