@@ -8,9 +8,13 @@ from c7n_azure.resources.arm import ArmResourceManager
 @resources.register('servicebus-namespace')
 class ServiceBusNamespace(ArmResourceManager):
     """Azure Service Bus Namespace Resource
+
     :example:
+
     Returns Service Bus Namespace resources
+
     .. code-block:: yaml
+
          policies:
           - name: basic-servicebus-namespace
             resource: azure.servicebus-namespace
@@ -18,6 +22,7 @@ class ServiceBusNamespace(ArmResourceManager):
               - type: value
                 key: authorizationRules
                 value: present
+
     """
 
     class resource_type(ArmResourceManager.resource_type):
