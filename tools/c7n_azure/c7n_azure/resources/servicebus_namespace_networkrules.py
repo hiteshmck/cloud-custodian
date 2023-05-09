@@ -17,6 +17,7 @@ class ServiceBusNamespaceNetworkrules(ChildResourceManager):
     Returns Service Bus Namespace Network Ruleset resources
 
     .. code-block:: yaml
+    
          policies:
           - name: basic-servicebus-namespace-networkrule
             resource: azure.servicebus-namespace-networkrules
