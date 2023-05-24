@@ -162,6 +162,7 @@ class AppEngineService(ChildResourceManager):
         id = 'id'
         default_report_fields = ['name', 'networkSettings']
         urn_component = "service"
+        asset_type = "appengine.googleapis.com/Service"
 
         @staticmethod
         def get(client, resource_info):
@@ -184,6 +185,7 @@ class AppEngineServiceVersion(ChildResourceManager):
         enum_spec = ('list', 'versions[]', None)
         default_report_fields = ['name', 'instanceClass', 'runtime', 'runtimeChannel', 'vm']
         urn_component = "versions"
+        asset_type = "appengine.googleapis.com/Version"
         parent_spec = {
             'resource': 'app-engine-service',
             'child_enum_params': [
