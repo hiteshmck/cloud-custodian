@@ -5,7 +5,7 @@ from c7n_azure.provider import resources
 from c7n_azure.resources.arm import ArmResourceManager
 
 
-@resources.register('monitor-logprofile')
+@resources.register('monitor-log-profile')
 class MonitorLogprofile(ArmResourceManager):
     """Azure Monitor Log Profile Resource
 
@@ -16,8 +16,8 @@ class MonitorLogprofile(ArmResourceManager):
     .. code-block:: yaml
 
          policies:
-          - name: basic-monitor-logprofile
-            resource: azure.monitor-logprofile
+          - name: basic-monitor-log-profile
+            resource: azure.monitor-log-profile
             filters:
               - type: value
                 key: categories
